@@ -13,6 +13,7 @@ from data_aug.gaussian_blur import GaussianBlur
 from torchvision import transforms, datasets
 from data_aug.view_generator import ContrastiveLearningViewGenerator
 from exceptions.exceptions import InvalidDatasetSelection
+from data_aug.view_generator import ContrastiveLearningViewGenerator
 
 model_names = sorted(
     name
@@ -128,7 +129,7 @@ def main():
         args.device = torch.device("cpu")
         args.gpu_index = -1
 
-    dataset = ModifiedDataset(args.data)
+    # dataset = ModifiedDataset(args.data)
 
     s = args.s
     size = args.crop_size
@@ -144,7 +145,10 @@ def main():
         ]
     )
     # train_dataset = dataset.get_dataset(args.dataset_name, args.n_views)
-    train_dataset = ModifiedDataset(args.data, data_transforms)
+    train_dataset = ModifiedDataset(
+        args.data,
+        transforms=ContrastiveLearningViewGenerator(data_transforms, args.n_views),
+    )
     train_loader = torch.utils.data.DataLoader(
         train_dataset,
         batch_size=args.batch_size,
