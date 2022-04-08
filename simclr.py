@@ -19,6 +19,12 @@ class SimCLR(object):
         self.optimizer = kwargs["optimizer"]
         self.scheduler = kwargs["scheduler"]
         self.writer = SummaryWriter()
+
+        handler = logging.StreamHandler()
+        handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
+        logger = logging.getLogger("simclr")
+        logger.addHandler(handler)
+        logger.setLevel(logging.DEBUG)
         logging.basicConfig(
             filename=os.path.join(self.writer.log_dir, "training.log"),
             level=logging.DEBUG,
